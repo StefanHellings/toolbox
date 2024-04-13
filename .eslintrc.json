@@ -1,6 +1,11 @@
 {
     "extends": [
+        "plugin:react/recommended",
         "next/core-web-vitals",
         "eslint-config-hellingsstefan"
-    ]
+    ],
+    "rules": {
+        "react/jsx-closing-bracket-location": [1, "after-props"],
+        "react/jsx-indent": [2, 4]
+    }
 }
