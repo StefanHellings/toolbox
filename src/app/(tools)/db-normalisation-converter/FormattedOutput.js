@@ -1,12 +1,14 @@
 'use client';
 
-export function getParts(input) {
-    const string = input
-        .replaceAll('<p>', '')
-        .replaceAll('</p>', '');
+function getSections(input) {
+    return input.split(')');
+}
 
-    const title = string.split('(')[0];
-    const attributes = `${string.split('(')[1]}`.split(')')[0];
+export function getParts(input, titleRegex = /\b\w+(?=\s*\()/) {
+    const title = input.match(titleRegex);
+
+    console.log('titleRegex', titleRegex, title);
+    const attributes = `${input.split('(')[1]}`.split(')')[0];
     const repeatingGroups = attributes.match(/RG\[[^\]]*\]/g);
     const fields = attributes.split(/RG\[[^\]]*\]/g).join('').replaceAll(', ', ',').split(',');
     const orderedFields = [ fields[0], ...fields.slice(1).sort() ].filter(Boolean);
@@ -18,28 +20,55 @@ export function getParts(input) {
     };
 }
 
-function formatInput(input) {
-    const { title, orderedFields, repeatingGroups } = getParts(input);
-
-    let values = '';
+function formatInput(input, withHeading, titleRegex) {
+    const sections = getSections(input).filter(Boolean);
     let output = '';
 
-    if (orderedFields && orderedFields.length)
-        values += orderedFields;
+    if (withHeading)
+        output += '|     |     |\n';
 
-    if (repeatingGroups && repeatingGroups.length)
-        values += `, ${repeatingGroups}`;
-
-    output += '|     |     |\n';
     output += '| --- | --- |\n';
-    output += `| ${title} | ${values} |`;
+
+    sections.forEach(section => {
+        const { title, orderedFields, repeatingGroups } = getParts(section, titleRegex);
+
+        let values = '';
+
+        if (orderedFields && orderedFields.length)
+            values += orderedFields;
+
+        if (repeatingGroups && repeatingGroups.length)
+            values += `,${repeatingGroups}`;
+
+        values = values
+            .replaceAll(',', ', ')
+            .replaceAll('  ', ' ');
+
+        output += `| ${title} | ${values} |\n`;
+    });
 
     return output;
 }
 
-function getFormattedOutput(input) {
-    if (input)
-        return formatInput(input);
+function cleanup(input) {
+    const toRemove = [ '<p>', '</p>', '<br>', '  ' ];
+    let string = input.replaceAll(' ', ''); // spaces will be placed back in later
+
+    toRemove.forEach(item => string = string.replaceAll(item, ''));
+
+    return string
+        .replaceAll(',</strong>', '</strong>,')
+        .replaceAll(',</u>', '</u>,')
+        .replaceAll(',</b>', '</b>,')
+        .replaceAll(',</i>', '</i>,')
+        .replaceAll('ë', 'e');
+}
+
+function getFormattedOutput({ input, withHeading = false, titleRegex }) {
+    if (!input)
+        return;
+
+    return formatInput(cleanup(input), withHeading, titleRegex);
 }
 
 export default getFormattedOutput;
