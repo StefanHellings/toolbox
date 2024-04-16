@@ -1,11 +1,5 @@
 'use client';
 
-function getSections(input) {
-    const sections = [];
-
-    return sections;
-}
-
 export function getParts(input) {
     const string = input
         .replaceAll('<p>', '')
