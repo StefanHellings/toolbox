@@ -6,8 +6,6 @@ function getSections(input) {
 
 export function getParts(input, titleRegex = /\b\w+(?=\s*\()/) {
     const title = input.match(titleRegex);
-
-    console.log('titleRegex', titleRegex, title);
     const attributes = `${input.split('(')[1]}`.split(')')[0];
     const repeatingGroups = attributes.match(/RG\[[^\]]*\]/g);
     const fields = attributes.split(/RG\[[^\]]*\]/g).join('').replaceAll(', ', ',').split(',');
