@@ -1,4 +1,7 @@
 import {
+    ArrowLeftRight,
+    BookType,
+    ChevronLeft,
     Dot,
     Home,
     LayoutGrid,
@@ -12,6 +15,9 @@ import {
 } from 'lucide-react';
 
 const iconLookup = {
+    ArrowLeftRight,
+    BookType,
+    ChevronLeft,
     Dot,
     Home,
     LayoutGrid,
