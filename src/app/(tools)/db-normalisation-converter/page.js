@@ -2,15 +2,13 @@
 
 import { useState } from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
 
+import ToolHeader from '@/components/ToolHeader';
 import Tiptap from '@/components/Tiptap';
-import Icon from '@/components/Icon';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
@@ -38,18 +36,7 @@ export default function DBNormalisationConverter() {
             <Head>
                 <title>Rich text converter</title>
             </Head>
-            <div className="flex items-center gap-4">
-                <Link href="/">
-                    <Button variant="outline" size="icon" className="h-7 w-7">
-                        <Icon name="ChevronLeft" className="h-4 w-4" />
-                        <span className="sr-only">Back</span>
-                    </Button>
-                </Link>
-                <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                    DB normalisation
-                </h1>
-            </div>
-
+            <ToolHeader title="DB normalisation" />
             <Card>
                 <CardHeader>
                     <CardTitle>Rich Text</CardTitle>
