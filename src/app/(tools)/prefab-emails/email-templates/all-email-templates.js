@@ -1,7 +1,7 @@
 import { prefab as invitation } from './email-template-invitation';
 
-const templates = [
+export const allTemplates = [
     invitation,
 ];
 
-export default templates;
+export default allTemplates;
