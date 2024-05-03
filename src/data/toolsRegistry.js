@@ -4,6 +4,11 @@ export const toolsRegistry = {
         description: 'Convert Rich Text into a table in Markdown',
         icon: 'BookType',
     },
+    'prefab-emails': {
+        title: 'Pre-fabricated emails',
+        description: 'Select an email-template and fill in the fields',
+        icon: 'Mail',
+    },
     // 'orders': {
     //     title: 'Orders',
     //     description: 'Description for Orders',

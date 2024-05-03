@@ -1,7 +1,7 @@
 'use client';
 
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import ToolHeader from '@/components/ToolHeader';
 import ComboBox from '@/components/ComboBox';
 
@@ -15,52 +15,57 @@ const templateList = allTemplates.map(template => ({
     ...template,
 }));
 
-const TypeComponent = (type, ...props) => {
+const TypeComponent = props => {
     const map = {
         'string': <Input type="text" {...props} />,
-        'date': <Input type="text" {...props} />,
-        'choice': <Select>
-            <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-                {/* {props.choices.map(choice => (
-                    <SelectItem key={choice} value={choice}>{choice}</SelectItem>
-                ))} */}
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-        </Select>,
+        'date': <Input {...props} />,
+        'choice': <>
+            <Select>
+                <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Theme" />
+                </SelectTrigger>
+                <SelectContent>
+                    {props.choices
+                        // .map(choice => (
+                        //     <SelectItem key={choice} value={choice}>{choice}</SelectItem>
+                        // ))
+                    }
+                    <SelectItem value="dark">Dark</SelectItem>
+                    <SelectItem value="system">System</SelectItem>
+                </SelectContent>
+            </Select>
+        </>,
     };
 
-    return map[type];
+    return (
+        <div>{map[props.type]}</div>
+    )
 };
 
 const ExpressionsList = ({ expressions }) => {
     const items = Object.entries(expressions);
 
     return (
-        <>
+        <div className="grid grid-cols-2 gap-2">
             {items.map(item => {
                 const [ key, props ] = item;
 
-                console.log(key, props);
-
                 return (
-                    <div className="grid gap-8" key={key}>
+                    <Fragment key={key}>
                         <label
                             htmlFor="regex"
-                            className="flex items-center text-sm font-medium leading-none">
-                            <div className="flex-none mr-2">{key}</div>
-                            <TypeComponent {...props} />
-                            <Input
+                            className="col-span-1 flex items-center text-sm font-medium leading-none">
+                            <div className="flex-none mr-2">A: {key}</div>
+                            {/* <Input
+                                className="col-span-3"
                                 type="text"
-                                onChange={() => {}}/>
+                                onChange={() => {}}/> */}
                         </label>
-                    </div>
+                        <TypeComponent className="col-span-3" type="text" {...props} />
+                    </Fragment>
                 );
             })}
-        </>
+        </div>
     );
 };
 
