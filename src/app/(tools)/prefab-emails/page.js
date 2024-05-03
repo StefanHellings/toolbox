@@ -20,18 +20,16 @@ const TypeComponent = props => {
         'string': <Input type="text" {...props} />,
         'date': <Input {...props} />,
         'choice': <>
-            <Select>
-                <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Theme" />
+            <Select className={props.className}>
+                <SelectTrigger>
+                    <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
                 <SelectContent>
-                    {props.choices
-                        // .map(choice => (
-                        //     <SelectItem key={choice} value={choice}>{choice}</SelectItem>
-                        // ))
+                    {props.choices &&
+                        props.choices.map(choice => (
+                            <SelectItem key={choice} value={choice}>{choice}</SelectItem>
+                        ))
                     }
-                    <SelectItem value="dark">Dark</SelectItem>
-                    <SelectItem value="system">System</SelectItem>
                 </SelectContent>
             </Select>
         </>,
@@ -46,22 +44,21 @@ const ExpressionsList = ({ expressions }) => {
     const items = Object.entries(expressions);
 
     return (
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-4 gap-2">
             {items.map(item => {
                 const [ key, props ] = item;
+                const label = key.charAt(0).toUpperCase() + key.slice(1);
 
                 return (
                     <Fragment key={key}>
                         <label
-                            htmlFor="regex"
-                            className="col-span-1 flex items-center text-sm font-medium leading-none">
-                            <div className="flex-none mr-2">A: {key}</div>
-                            {/* <Input
-                                className="col-span-3"
-                                type="text"
-                                onChange={() => {}}/> */}
+                            htmlFor={key}
+                            className="col-start-1 col-span-1 flex items-center text-sm font-medium leading-none">
+                            <div className="flex-none mr-2">{label}:</div>
                         </label>
-                        <TypeComponent className="col-span-3" type="text" {...props} />
+                        <div className="col-start-2 col-span-3">
+                            <TypeComponent id={key} {...props} />
+                        </div>
                     </Fragment>
                 );
             })}
