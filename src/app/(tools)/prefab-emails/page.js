@@ -18,8 +18,8 @@ const templateList = allTemplates.map(Template => ({
 
 const TypeComponent = props => {
     const map = {
-        'string': <Input {...props} 
-            onChange={value => props.onChange(value)} 
+        'string': <Input {...props}
+            onChange={event => props.onChange(event.target.value)}
             type="text" />,
         'date': <DatePicker {...props} />,
         'choice': <>
@@ -52,16 +52,9 @@ const TemplateInput = ({ instance, item, onChange }) => {
     const [ itemValue, setItemValue ] = useState(props?.default);
 
     const onChangeHandler = data => {
-        console.log(typeof data);
-        
-        /*const value = (typeof data === 'object')
-            ? data.target.value
-            : data;
-
-        setItemValue(value);
-        props.value = value;
+        setItemValue(data);
+        props.value = data;
         onChange();
-        */
     };
 
     return (
@@ -102,10 +95,8 @@ export default function PrefabEmails() {
     const [ , setForceUpdate ] = useState(0);
     const templateHandler = value => setTemplate(templateList.find(item => item.label === value));
 
-    const onChangeHandler = () => {
-        setForceUpdate(forceUpdate => forceUpdate + 1);
-        console.log(template);
-    };
+    // Force update component
+    const onChangeHandler = () => setForceUpdate(forceUpdate => forceUpdate + 1);
 
     return (
         <>
