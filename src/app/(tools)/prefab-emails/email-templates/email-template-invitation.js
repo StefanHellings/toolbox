@@ -2,7 +2,7 @@ const prefab = {
     expressions: {
         'name': 'NAME',
         'course': 'COURSE',
-        get date(inWeeks = 3) {
+        /*get date(inWeeks = 3) {
             const weekdays = 7 * inWeeks;
             const date = new Date();
 
@@ -29,7 +29,7 @@ const prefab = {
             ];
 
             return `${day}-${month}-${year}`;
-        },
+        },*/
     },
     template: `
         Dag ${name},
@@ -50,7 +50,7 @@ const prefab = {
         Gelieve mij te antwoorden ten laatste tegen <strong>het einde van deze week</strong>.
 
         Alvast bedankt.
-    `
-}
+    `,
+};
 
 export default prefab;
