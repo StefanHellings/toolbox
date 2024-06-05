@@ -11,10 +11,28 @@ export function getParts(input, tableNameRegex = /\b\w+(?=\s*\()/) {
     const fields = attributes.split(/RG\[[^\]]*\]/g).join('').replaceAll(', ', ',').split(',');
     const orderedFields = [ fields[0], ...fields.slice(1).sort() ].filter(Boolean);
 
+    // Count the amount of fields inside each repeating group and add them all together
+    let repeatingGroupFieldsLength = 0;
+
+    if (repeatingGroups?.length) {
+        repeatingGroupFieldsLength = repeatingGroups.reduce(
+            (accumulator, currentValue) => {
+                return accumulator + currentValue
+                    .replaceAll('RG[', '')
+                    .replaceAll(']', '')
+                    .split(',')
+                    .filter(Boolean)
+                    .length;
+            },
+            0,
+        );
+    }
+
     return {
         tableName,
         orderedFields,
         repeatingGroups,
+        nrOfFields: orderedFields.length + repeatingGroupFieldsLength,
     };
 }
 
@@ -35,16 +53,17 @@ function checkRegex(regex) {
 
 function formatInput(input, withHeading, tableNameRegex) {
     const sections = getSections(input).filter(Boolean);
+    const orderedSections = [ sections[0], ...sections.slice(1).sort() ];
     const checkedRegex = checkRegex(tableNameRegex);
     let output = '';
 
     if (withHeading) {
-        output += '|     |     |\n';
+        output += '| Table | Fields |\n';
         output += '| --- | --- |\n';
     }
 
-    sections.forEach(section => {
-        const { tableName, orderedFields, repeatingGroups } = getParts(section, checkedRegex);
+    orderedSections.forEach(section => {
+        const { tableName, orderedFields, repeatingGroups, nrOfFields } = getParts(section, checkedRegex);
 
         let values = '';
 
@@ -58,7 +77,7 @@ function formatInput(input, withHeading, tableNameRegex) {
             .replaceAll(',', ', ')
             .replaceAll('  ', ' ');
 
-        output += `| ${tableName} | ${values} |\n`;
+        output += `| ${tableName} (${nrOfFields}) | ${values} |\n`;
     });
 
     return output;
