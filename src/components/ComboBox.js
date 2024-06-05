@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { PropTypes, array } from 'prop-types';
+import { PropTypes } from 'prop-types';
 import { Check, ChevronsUpDown } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
