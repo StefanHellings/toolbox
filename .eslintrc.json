@@ -6,6 +6,7 @@
     ],
     "rules": {
         "react/jsx-closing-bracket-location": [1, "after-props"],
-        "react/jsx-indent": [2, 4]
+        "react/jsx-indent": [2, 4],
+        "linebreak-style": ["error", "unix"]
     }
 }
