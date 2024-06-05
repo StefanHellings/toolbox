@@ -33,21 +33,21 @@ export default function ComboBox({ items, placeholder = 'Search ...', selectHand
                     aria-expanded={open}
                     className="w-[200px] justify-between">
                     {value
-                        ? items.find((item) => item.value === value)?.label
+                        ? items.find((item) => item === value)
                         : placeholder}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-0">
                 <Command>
-                    <CommandInput placeholder="Search department..." />
+                    <CommandInput placeholder="Search templates..." />
                     <CommandList>
-                        <CommandEmpty>No department found.</CommandEmpty>
+                        <CommandEmpty>No templates found.</CommandEmpty>
                         <CommandGroup>
                             {items.map(item => (
                                 <CommandItem
-                                    key={item.value}
-                                    value={item.value}
+                                    key={item}
+                                    value={item}
                                     onSelect={(currentValue) => {
                                         setValue(currentValue === value ? '' : currentValue);
                                         setOpen(false);
@@ -57,9 +57,9 @@ export default function ComboBox({ items, placeholder = 'Search ...', selectHand
                                     <Check
                                         className={cn(
                                             'mr-2 h-4 w-4',
-                                            value === item.value ? 'opacity-100' : 'opacity-0'
+                                            value === item ? 'opacity-100' : 'opacity-0'
                                         )}/>
-                                    {item.label}
+                                    {item}
                                 </CommandItem>
                             ))}
                         </CommandGroup>
