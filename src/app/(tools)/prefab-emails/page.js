@@ -7,5 +7,5 @@ export default function PrefabEmails() {
                 <title>Prefabricated Emails</title>
             </Head>
         </>
-    )
+    );
 }
