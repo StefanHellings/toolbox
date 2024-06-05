@@ -4,31 +4,47 @@ function getSections(input) {
     return input.split(')');
 }
 
-export function getParts(input, titleRegex = /\b\w+(?=\s*\()/) {
-    const title = input.match(titleRegex);
+export function getParts(input, tableNameRegex = /\b\w+(?=\s*\()/) {
+    const tableName = input.match(tableNameRegex);
     const attributes = `${input.split('(')[1]}`.split(')')[0];
     const repeatingGroups = attributes.match(/RG\[[^\]]*\]/g);
     const fields = attributes.split(/RG\[[^\]]*\]/g).join('').replaceAll(', ', ',').split(',');
     const orderedFields = [ fields[0], ...fields.slice(1).sort() ].filter(Boolean);
 
     return {
-        title,
+        tableName,
         orderedFields,
         repeatingGroups,
     };
 }
 
-function formatInput(input, withHeading, titleRegex) {
+function checkRegex(regex) {
+    if (!regex)
+        return;
+
+    let isValid = true;
+
+    try {
+        new RegExp(regex);
+    } catch (e) {
+        isValid = false;
+    }
+
+    return isValid ? regex : null;
+}
+
+function formatInput(input, withHeading, tableNameRegex) {
     const sections = getSections(input).filter(Boolean);
+    const checkedRegex = checkRegex(tableNameRegex);
     let output = '';
 
-    if (withHeading)
+    if (withHeading) {
         output += '|     |     |\n';
-
-    output += '| --- | --- |\n';
+        output += '| --- | --- |\n';
+    }
 
     sections.forEach(section => {
-        const { title, orderedFields, repeatingGroups } = getParts(section, titleRegex);
+        const { tableName, orderedFields, repeatingGroups } = getParts(section, checkedRegex);
 
         let values = '';
 
@@ -42,7 +58,7 @@ function formatInput(input, withHeading, titleRegex) {
             .replaceAll(',', ', ')
             .replaceAll('  ', ' ');
 
-        output += `| ${title} | ${values} |\n`;
+        output += `| ${tableName} | ${values} |\n`;
     });
 
     return output;
@@ -62,11 +78,11 @@ function cleanup(input) {
         .replaceAll('ë', 'e');
 }
 
-function getFormattedOutput({ input, withHeading = false, titleRegex }) {
+function getFormattedOutput({ input, withHeading = false, tableNameRegex }) {
     if (!input)
         return;
 
-    return formatInput(cleanup(input), withHeading, titleRegex);
+    return formatInput(cleanup(input), withHeading, tableNameRegex);
 }
 
 export default getFormattedOutput;
