@@ -1,56 +1,75 @@
-const prefab = {
-    expressions: {
-        'name': 'NAME',
-        'course': 'COURSE',
-        /*get date(inWeeks = 3) {
-            const weekdays = 7 * inWeeks;
-            const date = new Date();
+export default class Prefab {
+    label = 'Invitation';
+    offsetInWeeks = 3;
 
-            date.setDate(date.getDate() + (((1 + weekDays - date.getDay()) % weekDays) || weekDays));
+    expressionsList = [
+        'name',
+        'course',
+        'date',
+    ];
 
-            return date; // returns the next monday in 3 weeks
-        },
-        get startDate() {
-            const date = new Date(this.date);
-            const [day, month, year] = [
-                date.getDate(),
-                date.getMonth(),
-                date.getFullYear(),
-            ];
+    name = {
+        type: 'string',
+        default: 'John Doe',
+        value: 'John Doe',
+    };
 
-            return `${day}-${month}-${year}`;
-        },
-        get startDateFull() {
-            const date = new Date(this.date);
-            const [day, month, year] = [
-                date.getDate(),
-                date.getMonth(),
-                date.getFullYear(),
-            ];
+    course = {
+        type: 'choice',
+        choices: [
+            'Basisopleinding ICT ontwikkeling',
+            'Enterprise Java Ontwikkelaar',
+            '.NET ontwikkelaar met C#',
+            'Full Stack developer',
+        ],
+        default: 'Basisopleinding ICT ontwikkeling',
+        value: 'Basisopleinding ICT ontwikkeling',
+    };
 
-            return `${day}-${month}-${year}`;
-        },*/
-    },
-    template: `
-        Dag {name},
+    date = {
+        type: 'date',
+        default: this.defaultDate(),
+        value: this.defaultDate(),
+    };
 
-        Jij hebt een aanvraag gedaan voor het volgen van de opleiding <strong>{course}</strong> bij VDAB. Graag informeer ik of het voor jou mogelijk is om op <strong>{startDateFull}</strong> te starten met de opleiding?
+    defaultDate() {
+        const weekdays = 7 * this.offsetInWeeks;
+        const d = new Date();
 
-        Wij hanteren een hybride opleidingsvorm. Dat betekent dat wij deels op kantoor werken (centrumleren) en deels thuis (thuisleren). Je bent 2 dagen per week aanwezig in het <a href="https://maps.app.goo.gl/hsFCuzR9NiSVCUyD9">opleidingscentrum T2-Campus te Genk</a>, de overige dagen werk je van thuis uit.
+        d.setDate(d.getDate() + (((1 + weekdays - d.getDay()) % weekdays) || weekdays));
 
-        Kan jij mij laten weten of je op <strong>{startDate}</strong> kan starten? Indien niet, dan bepalen we een andere startdatum. Zodra deze vast staat, volgt er een mail met meer informatie over de opleiding.
+        // console.log('defaultDate', d.toString());
 
-        Beschik je over een <strong>laptop</strong> om de opleiding te volgen? Indien niet, dan kan je gratis een laptop van VDAB in bruikleen krijgen zolang je de opleiding volgt. Deze laptop kan je zowel op de campus als thuis gebruiken.
+        return d.toString();
+    }
 
-        Nog even samengevat. Laat je mij weten:
-        <ul>
-            <li>of je kan starten op <strong>{startDate}</strong></li>
-            <li>of je beschikt over een eigen laptop of een leenlaptop van de VDAB wil aanvragen</li>
-        </ul>
-        Gelieve mij te antwoorden ten laatste tegen <strong>het einde van deze week</strong>.
+    dateToSimple(dateString) {
+        const date = new Date(dateString);
 
-        Alvast bedankt.
-    `,
-};
+        // Return this date into DD-MM-YYYY format
+        return date.getDate() + '----' + (date.getMonth() + 1) + '-----' + date.getFullYear();
+    }
 
-export default prefab;
+    get email() {
+        return `
+           Dag ${this.name.value},
+
+           Jij hebt een aanvraag gedaan voor het volgen van de opleiding <strong>${this.course.value}</strong> bij VDAB. Graag informeer ik of het voor jou mogelijk is om op <strong>${this.dateToSimple(this.date.value)}</strong> te starten met de opleiding?
+
+           Wij hanteren een hybride opleidingsvorm. Dat betekent dat wij deels op kantoor werken (centrumleren) en deels thuis (thuisleren). Je bent 2 dagen per week aanwezig in het <a href="https://maps.app.goo.gl/hsFCuzR9NiSVCUyD9">opleidingscentrum T2-Campus te Genk</a>, de overige dagen werk je van thuis uit.
+
+           Kan jij mij laten weten of je op <strong>${this.dateToSimple(this.date.value)}</strong> kan starten? Indien niet, dan bepalen we een andere startdatum. Zodra deze vast staat, volgt er een mail met meer informatie over de opleiding.
+
+           Beschik je over een <strong>laptop</strong> om de opleiding te volgen? Indien niet, dan kan je gratis een laptop van VDAB in bruikleen krijgen zolang je de opleiding volgt. Deze laptop kan je zowel op de campus als thuis gebruiken.
+
+           Nog even samengevat. Laat je mij weten:
+           <ul>
+               <li>of je kan starten op <strong>${this.date.value}</strong></li>
+               <li>of je beschikt over een eigen laptop of een leenlaptop van de VDAB wil aanvragen</li>
+           </ul>
+           Gelieve mij te antwoorden ten laatste tegen <strong>het einde van deze week</strong>.
+
+           Alvast bedankt.
+       `;
+    }
+}
