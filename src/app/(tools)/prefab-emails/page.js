@@ -51,9 +51,9 @@ const TemplateInput = ({ instance, item, onChange }) => {
     const label = item.charAt(0).toUpperCase() + item.slice(1);
     const [ itemValue, setItemValue ] = useState(props?.default);
 
-    const onChangeHandler = data => {
-        setItemValue(data);
-        props.value = data;
+    const onChangeHandler = value => {
+        setItemValue(value);
+        props.value = value;
         onChange();
     };
 
