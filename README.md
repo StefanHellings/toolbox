@@ -3,6 +3,7 @@
 - [ ] Sidebar: Open and Close functionality
 - [ ] DB Normalisation: Copy to clipboard
 - [ ] Pre-fabricated emails: Add extra templates
+- [ ] Convert codebase to Typescript
 
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
