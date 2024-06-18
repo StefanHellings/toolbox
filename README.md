@@ -1,10 +1,10 @@
 ## Todo
+- [x] ~~Auto-run eslint~~ Added pre-commit
 - [ ] Overview: Better UI
 - [ ] Sidebar: Open and Close functionality
 - [ ] DB Normalisation: Copy to clipboard
 - [ ] Pre-fabricated emails: Add extra templates
 - [ ] Convert codebase to Typescript
-- [ ] Auto-run eslint
 
 ## Toolbox ideas:
 - MySQL formatter: Paste in SQL code and get formatted output
