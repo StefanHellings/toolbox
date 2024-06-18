@@ -7,8 +7,9 @@ import ComboBox from '@/components/ComboBox';
 
 import allTemplates from './email-templates/all-email-templates';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { DatePicker } from '@/components/DatePicker';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 const templateList = allTemplates.map(Template => ({
@@ -97,6 +98,17 @@ export default function PrefabEmails() {
 
     // Force update component
     const onChangeHandler = () => setForceUpdate(forceUpdate => forceUpdate + 1);
+    const composeHandler = () => {
+        const to = 'test@test.com';
+        const subject = 'TEST';
+        const body = encodeURIComponent(template.instance.email);
+        const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
+        const target = '_blank';
+
+        // console.log(url);
+
+        window.open(url, target);
+    };
 
     return (
         <>
@@ -128,9 +140,14 @@ export default function PrefabEmails() {
                         <CardHeader>
                             <CardTitle>Template</CardTitle>
                         </CardHeader>
+
                         <CardContent>
                             {template.instance.email}
                         </CardContent>
+
+                        <CardFooter>
+                            <Button onClick={composeHandler}>Compose e-mail</Button>
+                        </CardFooter>
                     </Card>
                 </>
             }
