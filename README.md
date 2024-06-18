@@ -4,7 +4,11 @@
 - [ ] DB Normalisation: Copy to clipboard
 - [ ] Pre-fabricated emails: Add extra templates
 - [ ] Convert codebase to Typescript
+- [ ] Auto-run eslint
 
+## Toolbox ideas:
+- MySQL formatter: Paste in SQL code and get formatted output
+- MySQL excersise checker: Paste in a query and see if the output matches the expected results.
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
