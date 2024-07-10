@@ -1,7 +1,10 @@
+/* https://lucide.dev/icons/ */
 import {
     ArrowLeftRight,
     BookType,
     ChevronLeft,
+    Clipboard,
+    ClipboardCheck,
     Dot,
     Home,
     LayoutGrid,
@@ -19,6 +22,8 @@ const iconLookup = {
     ArrowLeftRight,
     BookType,
     ChevronLeft,
+    Clipboard,
+    ClipboardCheck,
     Dot,
     Home,
     LayoutGrid,

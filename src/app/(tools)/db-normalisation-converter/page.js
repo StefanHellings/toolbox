@@ -13,6 +13,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 import getFormattedOutput from './FormattedOutput';
+import { Button } from '@/components/ui/button';
+import Icon from '@/components/Icon';
 
 export default function DBNormalisationConverter() {
     const [ input, setInput ] = useState('');
@@ -58,10 +60,15 @@ export default function DBNormalisationConverter() {
                         {/* Output */}
                         <div className="grid gap-3">
                             <Label htmlFor="output">Output</Label>
-                            <Textarea
-                                id="output"
-                                value={getFormattedOutput(outputSettings)}
-                                className="min-h-32 font-mono text-xs"/>
+                            <div className="flex w-full rounded-md border border-input bg-background ring-offset-background">
+                                <Button variant="outline" size="icon">
+                                    <Icon name="ClipboardCheck" className="h-4 w-4" />
+                                </Button>
+                                <Textarea
+                                    id="output"
+                                    value={getFormattedOutput(outputSettings)}
+                                    className="min-h-32 font-mono text-xs"/>
+                            </div>
                         </div>
 
                         {/* Settings */}
