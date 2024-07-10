@@ -2,13 +2,23 @@
 - [x] ~~Auto-run eslint~~ Added pre-commit
 - [ ] Overview: Better UI
 - [ ] Sidebar: Open and Close functionality
-- [ ] DB Normalisation: Copy to clipboard
+- [ ] DB Normalisation: 
+    - [ ] Add Copy to clipboard
+    - [ ] Better regex placeholder
+    - [ ] Add nr of tables to formatted heading
+    - [ ] Add nr of RGs formatted heading
+    - [ ] Replace special characters
+        - Replace '’s' with 's'
+        - 'ë' with 'e'
+        - 'ï' with 'i'
+    - [ ] Word-wrap toggle for the input and output
 - [ ] Pre-fabricated emails: Add extra templates
-- [ ] Convert codebase to Typescript
+- [ ] Convert codebase to Typescripts
 
 ## Toolbox ideas:
 - MySQL formatter: Paste in SQL code and get formatted output
 - MySQL excersise checker: Paste in a query and see if the output matches the expected results.
+- Multicursor rich text editor
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
