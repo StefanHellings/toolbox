@@ -10,7 +10,7 @@ const tools = Object
 export default function Overview() {
     return (
         <div className="grid grid-cols-[repeat(_auto-fit,minmax(200px,1fr)_)] justify-items-stretch gap-4 pt-10">
-            {tools.map(([ path, item ]) => (
+            {tools.map(([ path, item ] = tool) => (
                 <Link
                     key={path}
                     href={`/${path}`}
