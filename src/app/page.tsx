@@ -3,17 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toolsRegistry } from '@/data/toolsRegistry';
 import Link from 'next/link';
 
-const tools = Object
-    .entries(toolsRegistry)
-    .map(([ key, value ]) => [ key, value ]);
-
 export default function Overview() {
     return (
         <div className="grid grid-cols-[repeat(_auto-fit,minmax(200px,1fr)_)] justify-items-stretch gap-4 pt-10">
-            {tools.map(([ path, item ] = tool) => (
+            {toolsRegistry.map(item => (
                 <Link
-                    key={path}
-                    href={`/${path}`}
+                    key={item.path}
+                    href={`/${item.path}`}
                     className="grid items-stretch justify-stretch">
                     <Card className="transition-all hover:bg-muted">
                         <CardHeader className="flex flex-row items-center justify-start space-y-0 pb-2">
