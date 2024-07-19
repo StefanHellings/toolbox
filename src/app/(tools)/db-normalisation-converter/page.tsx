@@ -21,16 +21,25 @@ export default function DBNormalisationConverter() {
     const [ withHeading, setWithHeading ] = useState(false);
     const [ withRegex, setWithRegex ] = useState(false);
     const [ tableNameRegex, setTableNameRegex ] = useState(/\b\w+(?=\s*\()/);
+    const [ isCopied, setIsCopied ] = useState(false);
 
-    const inputHandler = value => setInput(value);
-    const headingHandler = value => setWithHeading(value);
-    const regexHandler = value => setWithRegex(value);
-    const tableNameRegexHandler = value => setTableNameRegex(value);
+    const inputHandler = (value: string) => setInput(value);
+    const useHeadingHandler = (value: boolean) => setWithHeading(value);
+    const useRegexHandler = (value: boolean) => setWithRegex(value);
+    const tableNameRegexHandler = (value: string) => setTableNameRegex(new RegExp(value));
 
     const outputSettings = {
         input,
         withHeading,
         [withRegex && 'tableNameRegex']: tableNameRegex,
+    };
+
+    const copyHandler = () => {
+        navigator.clipboard.writeText(getFormattedOutput(outputSettings));
+        setIsCopied(true);
+        setTimeout(() => {
+            setIsCopied(false);
+        }, 3000);
     };
 
     return (
@@ -46,10 +55,9 @@ export default function DBNormalisationConverter() {
                         Paste in your rich text
                     </CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <div className="grid gap-8">
-
-                        {/* Input: */}
+                <CardContent className="grid gap-8">
+                    <>
+                        {/* Input */}
                         <div className="grid gap-3">
                             <Label htmlFor="input">Input</Label>
                             <Tiptap
@@ -60,14 +68,19 @@ export default function DBNormalisationConverter() {
                         {/* Output */}
                         <div className="grid gap-3">
                             <Label htmlFor="output">Output</Label>
-                            <div className="flex w-full rounded-md border border-input bg-background ring-offset-background">
-                                <Button variant="outline" size="icon">
-                                    <Icon name="ClipboardCheck" className="h-4 w-4" />
-                                </Button>
+                            <div className="relative w-full">
                                 <Textarea
+                                    className="w-full rounded-lg border border-input bg-background p-4 pr-10 text-foreground shadow-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50"
                                     id="output"
-                                    value={getFormattedOutput(outputSettings)}
-                                    className="min-h-32 font-mono text-xs"/>
+                                    rows={10}
+                                    value={getFormattedOutput(outputSettings)}/>
+                                <Button
+                                    className="absolute top-2 right-2 text-muted-foreground hover:bg-muted/50"
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={copyHandler}>
+                                    <Icon name={isCopied ? 'ClipboardCheck' : 'Clipboard'} className="h-4 w-4" />
+                                </Button>
                             </div>
                         </div>
 
@@ -77,7 +90,7 @@ export default function DBNormalisationConverter() {
                             <div className="flex items-center space-x-2">
                                 <Checkbox
                                     id="withHeading"
-                                    onCheckedChange={headingHandler}
+                                    onCheckedChange={useHeadingHandler}
                                     checked={withHeading} />
                                 <label
                                     htmlFor="withHeading"
@@ -88,7 +101,7 @@ export default function DBNormalisationConverter() {
                             <div className="flex items-center space-x-2">
                                 <Checkbox
                                     id="regex"
-                                    onCheckedChange={regexHandler}
+                                    onCheckedChange={useRegexHandler}
                                     checked={withRegex} />
                                 <label
                                     htmlFor="regex"
@@ -97,12 +110,12 @@ export default function DBNormalisationConverter() {
                                     <Input
                                         type="text"
                                         onChange={event => tableNameRegexHandler(event.target.value)}
-                                        value={tableNameRegex}
+                                        value={tableNameRegex.toString()}
                                         placeholder="\b\w+(?=\s*\()" />
                                 </label>
                             </div>
                         </div>
-                    </div>
+                    </>
                 </CardContent>
             </Card>
         </>

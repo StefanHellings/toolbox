@@ -1,10 +1,10 @@
 'use client';
 
-function getSections(input) {
+function getSections(input: string) {
     return input.split(')');
 }
 
-export function getParts(input, tableNameRegex = /\b\w+(?=\s*\()/) {
+export function getParts(input: string, tableNameRegex = /\b\w+(?=\s*\()/) {
     const tableName = input.match(tableNameRegex);
     const attributes = `${input.split('(')[1]}`.split(')')[0];
     const repeatingGroups = attributes.match(/RG\[[^\]]*\]/g);
@@ -36,7 +36,7 @@ export function getParts(input, tableNameRegex = /\b\w+(?=\s*\()/) {
     };
 }
 
-function checkRegex(regex) {
+function checkRegex(regex: RegExp) {
     if (!regex)
         return;
 
@@ -51,7 +51,7 @@ function checkRegex(regex) {
     return isValid ? regex : null;
 }
 
-function formatInput(input, withHeading, tableNameRegex) {
+function formatInput(input: string, withHeading: boolean, tableNameRegex: RegExp) {
     const sections = getSections(input).filter(Boolean);
     const orderedSections = [ sections[0], ...sections.slice(1).sort() ];
     const checkedRegex = checkRegex(tableNameRegex);
@@ -83,7 +83,7 @@ function formatInput(input, withHeading, tableNameRegex) {
     return output;
 }
 
-function cleanup(input) {
+function cleanup(input: string) {
     const toRemove = [ '<p>', '</p>', '<br>', '  ' ];
     let string = input.replaceAll(' ', ''); // spaces will be placed back in later
 
@@ -97,7 +97,13 @@ function cleanup(input) {
         .replaceAll('ë', 'e');
 }
 
-function getFormattedOutput({ input, withHeading = false, tableNameRegex }) {
+type UnformattedInput = {
+    input: string;
+    withHeading?: boolean;
+    tableNameRegex?: RegExp;
+};
+
+function getFormattedOutput({ input, withHeading = false, tableNameRegex }: UnformattedInput) {
     if (!input)
         return;
 
