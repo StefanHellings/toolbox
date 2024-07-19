@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "eslint --fix --ext .js,.jsx ."
+    "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx ."
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.1",
@@ -36,8 +36,10 @@
   "devDependencies": {
     "@types/node": "20.14.10",
     "@types/react": "18.3.3",
+    "@typescript-eslint/eslint-plugin": "^7.16.1",
+    "@typescript-eslint/parser": "^7.16.1",
     "date-fns": "^3.6.0",
-    "eslint": "^8",
+    "eslint": "^8.57.0",
     "eslint-config-hellingsstefan": "^1.0.1",
     "eslint-config-next": "14.2.0",
     "eslint-plugin-react": "^7.34.1",
@@ -45,7 +47,8 @@
     "pre-commit": "^1.2.2",
     "prop-types": "^15.8.1",
     "react-day-picker": "^8.10.1",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3"
   },
   "browser": {
     "fs": false,
