@@ -4,12 +4,13 @@ function getSections(input: string) {
     return input.split(')');
 }
 
-export function getParts(input: string, tableNameRegex = /\b\w+(?=\s*\()/) {
+function getParts(input = '', tableNameRegex = /\b\w+(?=\s*\()/) {
     const tableName = input.match(tableNameRegex);
     const attributes = `${input.split('(')[1]}`.split(')')[0];
     const repeatingGroups = attributes.match(/RG\[[^\]]*\]/g);
     const fields = attributes.split(/RG\[[^\]]*\]/g).join('').replaceAll(', ', ',').split(',');
     const orderedFields = [ fields[0], ...fields.slice(1).sort() ].filter(Boolean);
+    const repeatingGroupsLength = repeatingGroups?.length;
 
     // Count the amount of fields inside each repeating group and add them all together
     let repeatingGroupFieldsLength = 0;
@@ -32,6 +33,7 @@ export function getParts(input: string, tableNameRegex = /\b\w+(?=\s*\()/) {
         tableName,
         orderedFields,
         repeatingGroups,
+        repeatingGroupsLength,
         nrOfFields: orderedFields.length + repeatingGroupFieldsLength,
     };
 }
@@ -55,17 +57,23 @@ function formatInput(input: string, withHeading: boolean, tableNameRegex: RegExp
     const sections = getSections(input).filter(Boolean);
     const orderedSections = [ sections[0], ...sections.slice(1).sort() ];
     const checkedRegex = checkRegex(tableNameRegex);
+    const nrOfTables = orderedSections.length;
+    const nrOfFields = orderedSections.reduce((accumulator, currentValue) => accumulator + getParts(currentValue, checkedRegex).nrOfFields, 0);
     let output = '';
 
     if (withHeading) {
-        output += '| Table | Fields |\n';
+        output += `| Table (${nrOfTables}) | Fields (${nrOfFields}) |\n`;
         output += '| --- | --- |\n';
     }
 
     orderedSections.forEach(section => {
-        const { tableName, orderedFields, repeatingGroups, nrOfFields } = getParts(section, checkedRegex);
+        const { tableName, orderedFields, repeatingGroups, repeatingGroupsLength, nrOfFields } = getParts(section, checkedRegex);
 
         let values = '';
+        let metaData = `${nrOfFields}`;
+
+        if (repeatingGroupsLength)
+            metaData += ` - RG: ${repeatingGroupsLength}`;
 
         if (orderedFields && orderedFields.length)
             values += orderedFields;
@@ -77,7 +85,7 @@ function formatInput(input: string, withHeading: boolean, tableNameRegex: RegExp
             .replaceAll(',', ', ')
             .replaceAll('  ', ' ');
 
-        output += `| ${tableName} (${nrOfFields}) | ${values} |\n`;
+        output += `| ${tableName} (${metaData}) | ${values} |\n`;
     });
 
     return output;
@@ -103,7 +111,7 @@ type UnformattedInput = {
     tableNameRegex?: RegExp;
 };
 
-function getFormattedOutput({ input, withHeading = false, tableNameRegex }: UnformattedInput) {
+function getFormattedOutput({ input = '', withHeading = false, tableNameRegex }: UnformattedInput) {
     if (!input)
         return;
 
