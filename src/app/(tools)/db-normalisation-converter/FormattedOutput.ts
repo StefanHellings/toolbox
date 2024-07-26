@@ -102,7 +102,8 @@ function cleanup(input: string) {
         .replaceAll(',</u>', '</u>,')
         .replaceAll(',</b>', '</b>,')
         .replaceAll(',</i>', '</i>,')
-        .replaceAll('ë', 'e');
+        .replaceAll('ë', 'e')
+        .replaceAll('’', ''); // eg: Diploma's => Diplomas
 }
 
 type UnformattedInput = {
