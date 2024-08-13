@@ -18,7 +18,7 @@ import Icon from '@/components/Icon';
 
 export default function DBNormalisationConverter() {
     const [ input, setInput ] = useState('');
-    const [ withHeading, setWithHeading ] = useState(false);
+    const [ withHeading, setWithHeading ] = useState(true);
     const [ withRegex, setWithRegex ] = useState(false);
     const [ tableNameRegex, setTableNameRegex ] = useState(/\b\w+(?=\s*\()/);
     const [ isCopied, setIsCopied ] = useState(false);
