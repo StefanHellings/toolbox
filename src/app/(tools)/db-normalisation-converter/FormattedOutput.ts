@@ -92,18 +92,32 @@ function formatInput(input: string, withHeading: boolean, tableNameRegex: RegExp
 }
 
 function cleanup(input: string) {
-    const toRemove = [ '<p>', '</p>', '<br>', '  ' ];
-    let string = input.replaceAll(' ', ''); // spaces will be placed back in later
+    const toRemove = [
+        // RegExp arguments
+        // eslint-disable-next-line no-irregular-whitespace
+        /\u00a0/g, // ' ' non-breaking space
+        /\u2019/g, // '’' tick
+        /\u0060/g, // '`' backtick
 
-    toRemove.forEach(item => string = string.replaceAll(item, ''));
+        // HTML tags
+        '<p>',
+        '</p>',
+        '<br>',
+    ];
 
-    return string
-        .replaceAll(',</strong>', '</strong>,')
-        .replaceAll(',</u>', '</u>,')
-        .replaceAll(',</b>', '</b>,')
-        .replaceAll(',</i>', '</i>,')
-        .replaceAll('ë', 'e')
-        .replaceAll('’', ''); // eg: Diploma's => Diplomas
+    const toReplace = [
+        [ ',</strong>', '</strong>,' ],
+        [ ',</u>', '</u>,' ],
+        [ ',</b>', '</b>,' ],
+        [ ',</i>', '</i>,' ],
+        [ ' ', '' ], // spaces will be placed back in later
+        [ 'ë', 'e' ],
+    ];
+
+    toRemove.forEach(item => input = input.replaceAll(item, ''));
+    toReplace.forEach(([ from, to ]) => input = input.replaceAll(from, to));
+
+    return input;
 }
 
 type UnformattedInput = {
