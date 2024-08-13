@@ -1,6 +1,7 @@
 /* https://lucide.dev/icons/ */
 import {
     ArrowLeftRight,
+    BookOpenCheck,
     BookType,
     ChevronLeft,
     Clipboard,
@@ -20,6 +21,7 @@ import {
 
 const iconLookup = {
     ArrowLeftRight,
+    BookOpenCheck,
     BookType,
     ChevronLeft,
     Clipboard,

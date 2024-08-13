@@ -18,6 +18,12 @@ export const toolsRegistry: Tool[] = [
         description: 'Select an email-template and fill in the fields',
         icon: 'Mail',
     },
+    {
+        path: 'diffchecker',
+        title: 'Diff Checker',
+        description: 'Check the difference between 2 inputs',
+        icon: 'BookOpenCheck',
+    },
     // {
     //     path: 'orders',
     //     title: 'Orders',
