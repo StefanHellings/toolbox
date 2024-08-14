@@ -110,8 +110,9 @@ function cleanup(input: string) {
         [ ',</u>', '</u>,' ],
         [ ',</b>', '</b>,' ],
         [ ',</i>', '</i>,' ],
-        [ ' ', '' ], // spaces will be placed back in later
         [ 'ë', 'e' ],
+        [ ' , ', ', ' ],
+        [ ' ', '' ], // spaces will be placed back in later
     ];
 
     toRemove.forEach(item => input = input.replaceAll(item, ''));
