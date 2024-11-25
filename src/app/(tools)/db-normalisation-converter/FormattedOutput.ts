@@ -83,7 +83,9 @@ function formatInput(input: string, withHeading: boolean, tableNameRegex: RegExp
 
         values = values
             .replaceAll(',', ', ')
-            .replaceAll('  ', ' ');
+            .replaceAll('  ', ' ')
+            .replaceAll('<strong>', '**')
+            .replaceAll('</strong>', '**');
 
         output += `| ${tableName} (${metaData}) | ${values} |\n`;
     });
