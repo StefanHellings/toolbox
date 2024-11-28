@@ -84,6 +84,7 @@ function formatInput(input: string, withHeading: boolean, tableNameRegex: RegExp
         values = values
             .replaceAll(',', ', ')
             .replaceAll('  ', ' ')
+            .replaceAll('&nbsp;', '')
             .replaceAll('<strong>', '**')
             .replaceAll('</strong>', '**');
 
