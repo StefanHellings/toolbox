@@ -4,7 +4,10 @@ import { useState } from 'react';
 import Head from 'next/head';
 
 import ToolHeader from '@/components/ToolHeader';
-import Tiptap from '@/components/Tiptap';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import Bold from '@tiptap/extension-bold';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -16,6 +19,8 @@ import getFormattedOutput from './FormattedOutput';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/Icon';
 
+const defaultValue = '<p>TableName(<u>primaryKey</u>, attributeName_3, attributeName_1, RG[rg_attributeName_1, rg_attributeName_4, rg_attributeName_2, rg_attributeName_3,], attributeName_2, attributeName_4, RG[rg_attributeName_1, rg_attributeName_4, rg_attributeName_2, rg_attributeName_3])</p>'
+
 export default function DBNormalisationConverter() {
     const [ input, setInput ] = useState('');
     const [ withHeading, setWithHeading ] = useState(true);
@@ -23,10 +28,45 @@ export default function DBNormalisationConverter() {
     const [ tableNameRegex, setTableNameRegex ] = useState(/\b\w+(?=\s*\()/);
     const [ isCopied, setIsCopied ] = useState(false);
 
+    const editor = useEditor({
+        content: input || defaultValue,
+        extensions: [
+            StarterKit,
+            Underline,
+            Bold,
+        ],
+        editorProps: {
+            attributes: {
+                class: 'flex flex-col w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-32',
+            },
+        },
+        onUpdate: ({ editor }) => setInput(editor.getHTML()),
+    });
+
     const inputHandler = (value: string) => setInput(value);
     const useHeadingHandler = (value: boolean) => setWithHeading(value);
     const useRegexHandler = (value: boolean) => setWithRegex(value);
     const tableNameRegexHandler = (value: string) => setTableNameRegex(new RegExp(value));
+    const cleanupHandler = () => {
+        const cleanedInput = (editor?.getHTML() || input)
+            .replaceAll(' ', '')
+            .replaceAll(',', ' , ')
+            .replaceAll('<u> , </u>', ' , ')
+            .replaceAll('(', ' ( ')
+            .replaceAll(')', ' ) ')
+            .replaceAll('<strong> (', '( <strong>')
+            .replaceAll(' ) </strong>', ' </strong> )')
+            .replaceAll('<u> (', '( <u>')
+            .replaceAll(' ) </u>', ' </u> )')
+            .replaceAll('<u></u>', '')
+            .replaceAll('<u> </u>', '')
+        ;
+
+        console.log(cleanedInput);
+
+        editor?.commands.setContent(cleanedInput);
+        setInput(cleanedInput);
+    };
 
     const outputSettings = {
         input,
@@ -59,10 +99,11 @@ export default function DBNormalisationConverter() {
                     <>
                         {/* Input */}
                         <div className="grid gap-3">
-                            <Label htmlFor="input">Input</Label>
-                            <Tiptap
-                                defaultValue='<p>TableName(<u>primaryKey</u>, attributeName_3, attributeName_1, RG[rg_attributeName_1, rg_attributeName_4, rg_attributeName_2, rg_attributeName_3,], attributeName_2, attributeName_4, RG[rg_attributeName_1, rg_attributeName_4, rg_attributeName_2, rg_attributeName_3])</p>'
-                                onChange={inputHandler} />
+                            <Label htmlFor="input" className="flex gap-2">Input <Icon onClick={cleanupHandler} name='WandSparkles' className="h-4 w-4 cursor-pointer opacity-50 hover:opacity-100" /></Label>
+                            <EditorContent
+                                editor={editor}
+                                value={input}
+                                onChange={() => inputHandler} />
                         </div>
 
                         {/* Output */}

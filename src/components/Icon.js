@@ -15,6 +15,7 @@ import {
     Package2,
     PocketKnife,
     ShoppingCart,
+    WandSparkles,
     Users,
 } from 'lucide-react';
 
@@ -34,6 +35,7 @@ const iconLookup = {
     Package2,
     PocketKnife,
     ShoppingCart,
+    WandSparkles,
     Users,
 };
 

@@ -7,7 +7,7 @@ import Bold from '@tiptap/extension-bold';
 
 const Tiptap = props => {
     const editor = useEditor({
-        content: props.defaultValue || '<p>Hello There! 🌎️</p>',
+        content: props.content || props.value || props.defaultValue || '<p>Hello There! 🌎️</p>',
         extensions: [
             StarterKit,
             Underline,
@@ -17,6 +17,9 @@ const Tiptap = props => {
             attributes: {
                 class: 'flex flex-col w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-32',
             },
+        },
+        onUpdate: ({ editor }) => {
+            props.onChange(editor.getHTML());
         },
     });
 
