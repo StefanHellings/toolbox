@@ -19,7 +19,7 @@ import getFormattedOutput from './FormattedOutput';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/Icon';
 
-const defaultValue = '<p>TableName(<u>primaryKey</u>, attributeName_3, attributeName_1, RG[rg_attributeName_1, rg_attributeName_4, rg_attributeName_2, rg_attributeName_3,], attributeName_2, attributeName_4, RG[rg_attributeName_1, rg_attributeName_4, rg_attributeName_2, rg_attributeName_3])</p>'
+const defaultValue = '<p>TableName(<u>primaryKey</u>, attributeName_3, attributeName_1, RG[rg_attributeName_1, rg_attributeName_4, rg_attributeName_2, rg_attributeName_3,], attributeName_2, attributeName_4, RG[rg_attributeName_1, rg_attributeName_4, rg_attributeName_2, rg_attributeName_3])</p>';
 
 export default function DBNormalisationConverter() {
     const [ input, setInput ] = useState('');
@@ -61,8 +61,6 @@ export default function DBNormalisationConverter() {
             .replaceAll('<u></u>', '')
             .replaceAll('<u> </u>', '')
         ;
-
-        console.log(cleanedInput);
 
         editor?.commands.setContent(cleanedInput);
         setInput(cleanedInput);
