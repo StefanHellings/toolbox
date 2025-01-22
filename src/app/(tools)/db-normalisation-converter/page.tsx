@@ -97,7 +97,7 @@ export default function DBNormalisationConverter() {
                     <>
                         {/* Input */}
                         <div className="grid gap-3">
-                            <Label htmlFor="input" className="flex gap-2">Input <Icon onClick={cleanupHandler} name='WandSparkles' className="h-4 w-4 cursor-pointer opacity-50 hover:opacity-100" /></Label>
+                            <Label htmlFor="input" className="flex justify-between">Input <Icon onClick={cleanupHandler} name='WandSparkles' className="h-4 w-4 cursor-pointer opacity-50 hover:opacity-100 transition-opacity" /></Label>
                             <EditorContent
                                 editor={editor}
                                 value={input}
