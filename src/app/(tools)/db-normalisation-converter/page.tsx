@@ -48,7 +48,7 @@ export default function DBNormalisationConverter() {
     const useRegexHandler = (value: boolean) => setWithRegex(value);
     const tableNameRegexHandler = (value: string) => setTableNameRegex(new RegExp(value));
     const cleanupHandler = () => {
-        const cleanedInput = (editor?.getHTML() || input)
+        let cleanedInput = (editor?.getHTML() || input)
             .replaceAll(' ', '')
             .replaceAll(',', ' , ')
             .replaceAll('<u> , </u>', ' , ')
@@ -60,7 +60,19 @@ export default function DBNormalisationConverter() {
             .replaceAll(' ) </u>', ' </u> )')
             .replaceAll('<u></u>', '')
             .replaceAll('<u> </u>', '')
+            .replaceAll('<br>', '')
+            .replaceAll('<p></p>', '')
         ;
+
+        [ 'strong', 'u' ].forEach(tag => {
+            const tagRegex = new RegExp(`<${tag}>(.*?)</${tag}>`, 'g');
+
+            cleanedInput.match(tagRegex).map(section => {
+                const newSection = section.replaceAll(' , ', `</${tag}> , <${tag}>`);
+
+                cleanedInput = cleanedInput.replace(section, newSection);
+            });
+        });
 
         editor?.commands.setContent(cleanedInput);
         setInput(cleanedInput);
