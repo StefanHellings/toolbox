@@ -5,6 +5,7 @@ import Head from 'next/head';
 
 import ToolHeader from '@/components/ToolHeader';
 import { useEditor, EditorContent } from '@tiptap/react';
+import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Bold from '@tiptap/extension-bold';
@@ -28,6 +29,53 @@ export default function DBNormalisationConverter() {
     const [ tableNameRegex, setTableNameRegex ] = useState(/\b\w+(?=\s*\()/);
     const [ isCopied, setIsCopied ] = useState(false);
 
+    const inputHandler = (value: string) => setInput(value);
+    const useHeadingHandler = (value: boolean) => setWithHeading(value);
+    const useRegexHandler = (value: boolean) => setWithRegex(value);
+    const tableNameRegexHandler = (value: string) => setTableNameRegex(new RegExp(value));
+    const cleanupHandler = (editor: Editor) => {
+        /* Prep cleanup */
+        let cleanedInput = (editor?.getHTML() || input)
+            .replaceAll(' ', '')
+            .replaceAll(',', ' , ')
+            .replaceAll('<u> , </u>', ' , ')
+            .replaceAll('(', ' ( ')
+            .replaceAll(')', ' ) ')
+            .replaceAll('<strong> (', '( <strong>')
+            .replaceAll(' ) </strong>', ' </strong> )')
+            .replaceAll('<u> (', '( <u>')
+            .replaceAll(' ) </u>', ' </u> )')
+        ;
+
+        /* Split items up inside strong or underline tags */
+        [ 'strong', 'u' ].forEach(tag => {
+            const tagRegex = new RegExp(`<${tag}>(.*?)</${tag}>`, 'g');
+            const matches = cleanedInput.match(tagRegex) || [];
+
+            matches.forEach(section => {
+                if (!section.includes(','))
+                    return;
+
+                const newSection = section.replaceAll(' , ', `</${tag}> , <${tag}>`);
+
+                cleanedInput = cleanedInput.replace(section, newSection);
+            });
+        });
+
+        /* Final cleanup */
+        cleanedInput = cleanedInput
+            .replaceAll('<u></u>', '')
+            .replaceAll('<u> </u>', '')
+            .replaceAll('<strong></strong>', '')
+            .replaceAll('<strong> </strong>', '')
+            .replaceAll('<br>', '')
+            .replaceAll('<p></p>', '')
+        ;
+
+        editor?.commands.setContent(cleanedInput);
+        setInput(cleanedInput);
+    };
+
     const editor = useEditor({
         content: input || defaultValue,
         extensions: [
@@ -40,43 +88,11 @@ export default function DBNormalisationConverter() {
                 class: 'flex flex-col w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-32',
             },
         },
-        onUpdate: ({ editor }) => setInput(editor.getHTML()),
+        onUpdate: ({ editor }) => {
+            setInput(editor.getHTML());
+            cleanupHandler(editor);
+        },
     });
-
-    const inputHandler = (value: string) => setInput(value);
-    const useHeadingHandler = (value: boolean) => setWithHeading(value);
-    const useRegexHandler = (value: boolean) => setWithRegex(value);
-    const tableNameRegexHandler = (value: string) => setTableNameRegex(new RegExp(value));
-    const cleanupHandler = () => {
-        let cleanedInput = (editor?.getHTML() || input)
-            .replaceAll(' ', '')
-            .replaceAll(',', ' , ')
-            .replaceAll('<u> , </u>', ' , ')
-            .replaceAll('(', ' ( ')
-            .replaceAll(')', ' ) ')
-            .replaceAll('<strong> (', '( <strong>')
-            .replaceAll(' ) </strong>', ' </strong> )')
-            .replaceAll('<u> (', '( <u>')
-            .replaceAll(' ) </u>', ' </u> )')
-            .replaceAll('<u></u>', '')
-            .replaceAll('<u> </u>', '')
-            .replaceAll('<br>', '')
-            .replaceAll('<p></p>', '')
-        ;
-
-        [ 'strong', 'u' ].forEach(tag => {
-            const tagRegex = new RegExp(`<${tag}>(.*?)</${tag}>`, 'g');
-
-            cleanedInput.match(tagRegex).map(section => {
-                const newSection = section.replaceAll(' , ', `</${tag}> , <${tag}>`);
-
-                cleanedInput = cleanedInput.replace(section, newSection);
-            });
-        });
-
-        editor?.commands.setContent(cleanedInput);
-        setInput(cleanedInput);
-    };
 
     const outputSettings = {
         input,
