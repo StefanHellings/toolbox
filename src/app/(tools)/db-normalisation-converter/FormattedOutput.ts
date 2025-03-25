@@ -98,9 +98,10 @@ function cleanup(input: string) {
     const toRemove = [
         // RegExp arguments
         // eslint-disable-next-line no-irregular-whitespace
-        /\u00a0/g, // ' ' non-breaking space
+        /\u00A0/g, // ' ' non-breaking space
         /\u2019/g, // '’' tick
         /\u0060/g, // '`' backtick
+        /&nbsp;/g,
 
         // HTML tags
         '<p>',

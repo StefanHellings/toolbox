@@ -37,6 +37,7 @@ export default function DBNormalisationConverter() {
         /* Prep cleanup */
         let cleanedInput = (editor?.getHTML() || input)
             .replaceAll(' ', '')
+            .replaceAll(/&nbsp;/g, '')
             .replaceAll(',', ' , ')
             .replaceAll('<u> , </u>', ' , ')
             .replaceAll('(', ' ( ')
