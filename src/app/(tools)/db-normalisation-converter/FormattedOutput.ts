@@ -9,8 +9,12 @@ function getParts(input = '', tableNameRegex = /\b\w+(?=\s*\()/) {
     const attributes = `${input.split('(')[1]}`.split(')')[0];
     const repeatingGroups = attributes.match(/RG\[[^\]]*\]/g);
     const fields = attributes.split(/RG\[[^\]]*\]/g).join('').replaceAll(', ', ',').split(',');
-    const orderedFields = [ fields[0], ...fields.slice(1).sort() ].filter(Boolean);
+    const keys = attributes.match(/<strong><u>(.*?)<\/u><\/strong>|<u>(.*?)<\/u>/g);
     const repeatingGroupsLength = repeatingGroups?.length;
+    const orderedFields = [
+        ...keys.sort(),
+        ...fields.filter(item => !keys.includes(item)).filter(Boolean).sort(),
+    ];
 
     // Count the amount of fields inside each repeating group and add them all together
     let repeatingGroupFieldsLength = 0;
@@ -31,6 +35,7 @@ function getParts(input = '', tableNameRegex = /\b\w+(?=\s*\()/) {
 
     return {
         tableName,
+        keys,
         orderedFields,
         repeatingGroups,
         repeatingGroupsLength,
