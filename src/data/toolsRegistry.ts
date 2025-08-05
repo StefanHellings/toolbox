@@ -18,6 +18,12 @@ export const toolsRegistry: Tool[] = [
         description: 'Select an email-template and fill in the fields',
         icon: 'Mail',
     },
+    {
+        path: 'bcnv-to-sql-create',
+        title: 'BCNV to SQL CREATE ',
+        description: 'Input a BCNV normalization, get an SQL CREATE query',
+        icon: 'DatabaseZap',
+    },
     // {
     //     path: 'orders',
     //     title: 'Orders',
