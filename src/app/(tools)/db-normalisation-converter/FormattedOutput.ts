@@ -1,11 +1,13 @@
 'use client';
 
+const regex_tableName = /(?:<[^>]+>)*([\p{L}\p{N}_]+)(?:<\/[^>]+>)*(?=\s*\()/gu;
+
 function getSections(input: string) {
     return input.split(')');
 }
 
-function getParts(input = '', tableNameRegex = /\b\w+(?=\s*\()/) {
-    const tableName = input.match(tableNameRegex);
+function getParts(input = '', tableNameRegex = regex_tableName) {
+    const tableName = input.match(tableNameRegex)[0].replaceAll('<strong>','').replaceAll('</strong>','');
     const attributes = `${input.split('(')[1]}`.split(')')[0];
     const repeatingGroups = attributes.match(/RG\[[^\]]*\]/g);
     const fields = attributes.split(/RG\[[^\]]*\]/g).join('').replaceAll(', ', ',').split(',');
