@@ -67,7 +67,7 @@ export default function DBNormalisationConverter() {
         });
 
         /* Remove all strikethrough tags */
-        const strikethroughRegex =  new RegExp(`<s>(.*?)</s>`, 'g');
+        const strikethroughRegex = new RegExp('<s>(.*?)</s>', 'g');
         const strikethroughMatches = cleanedInput.match(strikethroughRegex) || [];
 
         strikethroughMatches.forEach(section => {
