@@ -37,6 +37,9 @@ export default function DBNormalisationConverter() {
         /* Prep cleanup */
         let cleanedInput = (editor?.getHTML() || input)
             .replaceAll(' ', '')
+            .replaceAll('&nbsp;', '')
+            .replaceAll(', )',')')
+            .replaceAll(',)', ')')
             .replaceAll(',', ' , ')
             .replaceAll('<u> , </u>', ' , ')
             .replaceAll('(', ' ( ')
@@ -45,6 +48,7 @@ export default function DBNormalisationConverter() {
             .replaceAll(' ) </strong>', ' </strong> )')
             .replaceAll('<u> (', '( <u>')
             .replaceAll(' ) </u>', ' </u> )')
+            .replaceAll(': (',' (')
         ;
 
         /* Split items up inside strong or underline tags */
@@ -60,6 +64,14 @@ export default function DBNormalisationConverter() {
 
                 cleanedInput = cleanedInput.replace(section, newSection);
             });
+        });
+
+        /* Remove all strikethrough tags */
+        const strikethroughRegex =  new RegExp(`<s>(.*?)</s>`, 'g');
+        const strikethroughMatches = cleanedInput.match(strikethroughRegex) || [];
+
+        strikethroughMatches.forEach(section => {
+            cleanedInput = cleanedInput.replaceAll(section, '');
         });
 
         /* Final cleanup */
