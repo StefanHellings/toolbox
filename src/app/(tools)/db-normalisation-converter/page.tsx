@@ -51,6 +51,16 @@ export default function DBNormalisationConverter() {
             .replaceAll(': (',' (')
         ;
 
+        const hasBrackets = cleanedInput.includes('(') || cleanedInput.includes(')');
+        const hasColons = cleanedInput.includes(':');
+
+        /* Check for "(" and ")" */
+        if (!hasBrackets && hasColons) {
+            cleanedInput = cleanedInput
+                .replaceAll(':', ' ( ')
+                .concat(' )');
+        }
+
         /* Split items up inside strong or underline tags */
         [ 'strong', 'u' ].forEach(tag => {
             const tagRegex = new RegExp(`<${tag}>(.*?)</${tag}>`, 'g');
