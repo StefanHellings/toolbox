@@ -255,7 +255,7 @@ const SQLTableManager = props => {
                         <AccordionTrigger className='text-sm p-1'>SQL Preview</AccordionTrigger>
                         <AccordionContent>
                             <pre className="bg-muted p-4 rounded-md overflow-x-auto text-sm">
-                                {`CREATE TABLE ${tableName} (`}
+                                {`CREATE TABLE ${tableName} (\n  `}
                                 {
                                     `${attributes
                                         .map((attr) => {
