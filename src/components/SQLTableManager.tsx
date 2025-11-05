@@ -2,9 +2,10 @@
 import * as React from 'react';
 
 import { useState } from 'react';
-import { Trash2, Key, Link } from 'lucide-react';
+import { Trash2, Key, Link, Plus } from 'lucide-react';
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
@@ -70,8 +71,6 @@ const SQLTableManager = props => {
         },
     ]);
 
-    // console.log('allAttributes', allAttributes);
-    /*
     const addAttribute = () => {
         const newId = (attributes.length + 1);
 
@@ -89,7 +88,6 @@ const SQLTableManager = props => {
             },
         ]);
     };
-    */
 
     const removeAttribute = (id: number) => setAttributes(attributes.filter((attr) => attr.id !== id));
 
@@ -147,12 +145,9 @@ const SQLTableManager = props => {
 
     return (
         <div className={props.className}>
-            <CardContent className="p-0 pt-0 space-y-6 w-full">
+            <CardContent className="grid gap-3 p-0 w-full">
                 {/* Table Name Input */}
                 <div className="flex items-center gap-2">
-                    <label htmlFor="table-name" className="text-sm font-medium">
-                        Tablename:
-                    </label>
                     <Input
                         id="table-name"
                         value={tableName}
@@ -160,13 +155,9 @@ const SQLTableManager = props => {
                 </div>
 
                 {/* Attributes */}
-                <div className="space-y-4 pb-4">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-medium">Attributes:</h3>
-                    </div>
-
+                <div className="space-y-1">
                     {attributes.map((attr) => (
-                        <div key={attr.id} className="grid grid-cols-12 gap-5 pb-3 border-b items-center">
+                        <div key={attr.id} className="grid grid-cols-12 gap-5 items-center">
                             {/* Attribute Name */}
                             {AttrNameInput(attr)}
 
@@ -253,32 +244,39 @@ const SQLTableManager = props => {
                         </div>
                     ))}
 
-                    {/* <Button onClick={addAttribute} size="icon" className="h-6 w-6">
+                    <Button onClick={addAttribute} variant="secondary" size="icon" className="h-6 w-6">
                         <Plus className="h-3 w-3" />
-                    </Button> */}
+                    </Button>
                 </div>
 
-                {/* SQL Query Output */}
-                {/* <div className="space-y-2">
-                    <h3 className="text-lg font-medium">SQL Preview</h3>
-                    <pre className="bg-muted p-4 rounded-md overflow-x-auto text-sm">
-                        {`CREATE TABLE ${tableName} (
-                            ${attributes
-                                .map((attr) => {
-                                    let line = `${attr.name} ${attr.type}`
-                                    if (attr.type === "VARCHAR" || attr.type === "CHAR") {
-                                        line += attr.length ? `(${attr.length})` : "(255)"
-                                    }
-                                    if (attr.isNotNull) line += " NOT NULL"
-                                    if (attr.isAutoIncrement) line += " AUTO_INCREMENT"
-                                    if (attr.isPrimaryKey) line += " PRIMARY KEY"
-                                    if (attr.isUnique && !attr.isPrimaryKey) line += " UNIQUE"
-                                    return line
-                                })
-                                .join(",\n  ")}
-                        );`}
-                    </pre>
-                </div> */}
+                {/* Single SQL Query Preview */}
+                <Accordion type="single" collapsible>
+                    <AccordionItem value="item-1" className='border-0'>
+                        <AccordionTrigger className='text-sm p-1'>SQL Preview</AccordionTrigger>
+                        <AccordionContent>
+                            <pre className="bg-muted p-4 rounded-md overflow-x-auto text-sm">
+                                {`CREATE TABLE ${tableName} (`}
+                                {
+                                    `${attributes
+                                        .map((attr) => {
+                                            let line = `${attr.name} ${attr.type}`;
+
+                                            if (attr.type === 'VARCHAR' || attr.type === 'CHAR')
+                                                line += attr.length ? `(${attr.length})` : '(255)';
+                                            if (attr.isNotNull) line += ' NOT NULL';
+                                            if (attr.isAutoIncrement) line += ' AUTO_INCREMENT';
+                                            if (attr.isPrimaryKey) line += ' PRIMARY KEY';
+                                            if (attr.isUnique && !attr.isPrimaryKey) line += ' UNIQUE';
+                                            return line;
+                                        })
+                                        .join(',\n  ')
+                                    }`
+                                }
+                                {'\n});'}
+                            </pre>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
             </CardContent>
         </div>
     );

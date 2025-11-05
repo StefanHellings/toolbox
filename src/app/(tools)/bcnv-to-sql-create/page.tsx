@@ -43,8 +43,9 @@ function QuerySettings(props: QuerySettingsProps) {
     const { sections } = props;
 
     return (
-        <div>
-            <div className="space-y-4">
+        <div className="grid gap-8">
+            <h3 className="text-2xl font-semibold leading-none tracking-tight">Tables</h3>
+            <div className="grid gap-8">
                 {sections?.map(section => <QuerySection key={section.tableName} {...section} />)}
             </div>
         </div>
@@ -53,9 +54,7 @@ function QuerySettings(props: QuerySettingsProps) {
 
 function QuerySection(props: QuerySectionObject) {
     return (
-        <div className="space-y-2 flex flex-row items-center justify-between rounded-lg border p-2">
-            <SQLTableManager className="border-0" {...props} />
-        </div>
+        <SQLTableManager className="border-b pb-8" {...props} />
     );
 }
 
@@ -100,8 +99,11 @@ export default function DBNormalisationConverter() {
             <ToolHeader title="BCNV to SQL CREATE" />
             <Card className="border-0">
                 <CardContent className="grid gap-8 p-0">
-                    <>
-                        {/* Input */}
+                    {/* BCNV & Unique Indexes Inputs */}
+                    <div className="grid gap-8 p-0 mb-8">
+                        <h3 className="text-2xl font-semibold leading-none tracking-tight">BCNV</h3>
+
+                        {/* Attributes Input */}
                         <div className="grid gap-3">
                             <Label htmlFor="attributes" className="flex justify-between">Attributes:</Label>
                             <EditorContent
@@ -111,6 +113,7 @@ export default function DBNormalisationConverter() {
                                 onChange={() => attributesInputHandler} />
                         </div>
 
+                        {/* Unique Indexes Input */}
                         <div className="grid gap-3">
                             <Label htmlFor="uniqueIndexes" className="flex justify-between">Unique Indexes:</Label>
                             <EditorContent
@@ -119,29 +122,29 @@ export default function DBNormalisationConverter() {
                                 value={uniqueIndexesInput}
                                 onChange={() => uniqueIndexesInputHandler} />
                         </div>
+                    </div>
 
-                        {/* Settings */}
-                        <QuerySettings sections={querySections} />
+                    {/* Table settings & attributes */}
+                    <QuerySettings sections={querySections} />
 
-                        {/* Output */}
-                        <div className="grid gap-3">
-                            <Label htmlFor="output">Output</Label>
-                            <div className="relative w-full">
-                                <Textarea
-                                    className="w-full rounded-lg border border-input bg-background p-4 pr-10 text-foreground shadow-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50"
-                                    id="output"
-                                    rows={10}
-                                    readOnly/>
-                                <Button
-                                    className="absolute top-2 right-2 text-muted-foreground hover:bg-muted/50"
-                                    variant="outline"
-                                    size="icon"
-                                    onClick={copyHandler}>
-                                    <Icon name={isCopied ? 'ClipboardCheck' : 'Clipboard'} className="h-4 w-4" />
-                                </Button>
-                            </div>
+                    {/* Full SQL Query Output */}
+                    <div className="grid gap-3">
+                        <Label htmlFor="output">Output</Label>
+                        <div className="relative w-full">
+                            <Textarea
+                                className="w-full rounded-lg border border-input bg-background p-4 pr-10 text-foreground shadow-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50"
+                                id="output"
+                                rows={10}
+                                readOnly/>
+                            <Button
+                                className="absolute top-2 right-2 text-muted-foreground hover:bg-muted/50"
+                                variant="outline"
+                                size="icon"
+                                onClick={copyHandler}>
+                                <Icon name={isCopied ? 'ClipboardCheck' : 'Clipboard'} className="h-4 w-4" />
+                            </Button>
                         </div>
-                    </>
+                    </div>
                 </CardContent>
             </Card>
         </>
