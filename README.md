@@ -13,13 +13,13 @@
         - 'ï' with 'i'
     - [ ] Word-wrap toggle for the input and output
 - [ ] Pre-fabricated emails: Add extra templates
-- [ ] Convert codebase to Typescripts
+- [x] Convert codebase to Typescripts
+- [ ] SQL `CREATE TABLE` generator based on BCNF and Unique Indexes
 
 ## Toolbox ideas:
 - MySQL formatter: Paste in SQL code and get formatted output
 - MySQL excersise checker: Paste in a query and see if the output matches the expected results.
 - Multicursor rich text editor
-- SQL `CREATE TABLE` generator based on BCNF and Unique Indexes
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
