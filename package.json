@@ -42,7 +42,7 @@
     "date-fns": "^3.6.0",
     "eslint": "^8.57.0",
     "eslint-config-hellingsstefan": "^1.0.1",
-    "eslint-config-next": "14.2.0",
+    "eslint-config-next": "16.0.3",
     "eslint-plugin-react": "^7.34.1",
     "postcss": "^8",
     "pre-commit": "^1.2.2",
